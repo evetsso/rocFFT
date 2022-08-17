@@ -48,6 +48,7 @@ NodeFactory::Map1DLength const NodeFactory::map1DLengthSingle = {
     {65536, 256}, //            CC (256cc + 256rc)
     {131072, 256}, //           CC (256cc + 512rc)
     {262144, 512}, //           CC (512cc + 512rc)
+    {524288, 512}, //           CC (512cc + 1024rc)
 
     // ----------------------------------------------------------
     // non-pow2 lengths in (4096, 8192)
@@ -556,7 +557,7 @@ ComputeScheme NodeFactory::Decide1DScheme(NodeMetaData& nodeData)
     if(IsPo2(nodeData.length[0])) // multiple kernels involving transpose
     {
         // TODO: wrap the below into a function and check with LDS size
-        size_t block_threshold = 262144;
+        size_t block_threshold = 524288;
         if(nodeData.length[0] <= block_threshold)
         {
             // Enable block compute under these conditions
