@@ -37,6 +37,7 @@
 
 #include "../../shared/CLI11.hpp"
 #include "../../shared/concurrency.h"
+#include "../../shared/device_properties.h"
 #include "../../shared/environment.h"
 #include "../../shared/rocfft_accuracy_test.h"
 #include "../../shared/test_params.h"
@@ -169,6 +170,15 @@ system_memory get_system_memory()
     }
 
 #endif
+
+    auto deviceProp = get_curr_device_prop();
+    // on integrated APU, assume "device" gets half the memory
+    // and "host" gets the other half
+    if(deviceProp.integrated)
+    {
+        memory_data.total_bytes /= 2;
+        memory_data.free_bytes /= 2;
+    }
     return memory_data;
 }
 

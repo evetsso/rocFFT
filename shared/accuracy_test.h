@@ -31,6 +31,7 @@
 #include <string>
 #include <vector>
 
+#include "device_properties.h"
 #include "enum_to_string.h"
 #include "fft_params.h"
 #include "fftw_transform.h"
@@ -149,6 +150,8 @@ inline void check_problem_fits_device_memory(Tparams& params, const int verbose)
 
     if(vramgb == 0)
     {
+        auto deviceProp = get_curr_device_prop();
+
         // Check free and total available memory:
         size_t free       = 0;
         size_t total      = 0;
@@ -170,6 +173,14 @@ inline void check_problem_fits_device_memory(Tparams& params, const int verbose)
                 throw ROCFFT_GTEST_FAIL{std::move(ss)};
             }
         }
+        // on integrated APU, assume "device" gets half the memory
+        // and "host" gets the other half
+        if(deviceProp.integrated)
+        {
+            free /= 2;
+            total /= 2;
+        }
+
         vram_avail = total;
     }
     else
