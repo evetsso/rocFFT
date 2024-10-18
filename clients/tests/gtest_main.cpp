@@ -172,12 +172,12 @@ system_memory get_system_memory()
 #endif
 
     auto deviceProp = get_curr_device_prop();
-    // on integrated APU, assume "device" gets half the memory
-    // and "host" gets the other half
+    // on integrated APU, we can't expect to reuse "device" memory
+    // for "host" things.
     if(deviceProp.integrated)
     {
-        memory_data.total_bytes /= 2;
-        memory_data.free_bytes /= 2;
+        memory_data.total_bytes -= deviceProp.totalGlobalMem;
+        memory_data.free_bytes -= deviceProp.totalGlobalMem;
     }
     return memory_data;
 }
