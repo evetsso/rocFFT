@@ -570,7 +570,10 @@ std::vector<char> RTCCache::cached_compile(const std::string&          kernel_na
     // As of this writing, there are no known performance benefits to
     // including the flags.  If that changes, we may need to be more
     // selective about which flags to strip.
-    std::string gpu_arch = gpu_arch_strip_flags(gpu_arch_with_flags);
+    // std::string gpu_arch = gpu_arch_strip_flags(gpu_arch_with_flags);
+
+    // hardcode gpu_arch for testing
+    std::string gpu_arch = "gfx1210";
 
     std::shared_future<std::vector<char>> result;
 
