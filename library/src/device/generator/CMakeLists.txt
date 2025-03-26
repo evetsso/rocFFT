@@ -25,6 +25,10 @@ add_library( generator OBJECT generator.cpp fftgenerator.cpp )
 add_executable( stockham_gen stockham_gen.cpp )
 target_link_libraries( stockham_gen PRIVATE generator )
 
+set_target_properties( stockham_gen PROPERTIES
+  BUILD_RPATH ${ROCM_PATH}/lib
+)
+
 foreach( target stockham_gen generator )
   set_target_properties( ${target} PROPERTIES
     CXX_STANDARD 17

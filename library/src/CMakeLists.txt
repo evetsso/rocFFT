@@ -77,6 +77,9 @@ target_link_libraries( rocfft_rtc_helper PRIVATE rocfft-rtc-compile )
 set_target_properties( rocfft_rtc_helper PROPERTIES CXX_STANDARD 17 CXX_STANDARD_REQUIRED ON
                                          INSTALL_RPATH "${APPEND_ROCMLIB_RPATH}" )
 target_link_directories( rocfft_rtc_helper PRIVATE ${ROCFFT_HOST_LINK_DIRS} )
+set_target_properties( rocfft_rtc_helper PROPERTIES
+  BUILD_RPATH ${ROCM_PATH}/lib
+)
 
 # Package that helps me set visibility for function names exported
 # from shared library
@@ -459,6 +462,9 @@ target_link_libraries( rocfft_aot_helper PRIVATE
   rocfft-function-pool
   rocfft-solution-map
   )
+set_target_properties( rocfft_aot_helper PROPERTIES
+  BUILD_RPATH ${ROCM_PATH}/lib
+)
 target_link_std_experimental_filesystem( rocfft_aot_helper )
 
  # build executable rocfft-offline-tuner
@@ -521,7 +527,7 @@ if ( ROCFFT_KERNEL_CACHE_ENABLE )
   list( REMOVE_ITEM GPU_TARGETS_AOT gfx1200 )
   add_custom_command(
     OUTPUT rocfft_kernel_cache.db
-    COMMAND ${CMAKE_COMMAND} -E env "LD_LIBRARY_PATH=$ENV{LD_LIBRARY_PATH}:${ROCM_PATH}/${CMAKE_INSTALL_LIBDIR}" "${CMAKE_CURRENT_BINARY_DIR}/rocfft_aot_helper" \"${ROCFFT_BUILD_KERNEL_CACHE_PATH}\" ${ROCFFT_KERNEL_CACHE_PATH} $<TARGET_FILE:rocfft_rtc_helper> ${GPU_TARGETS_AOT}
+    COMMAND "${CMAKE_CURRENT_BINARY_DIR}/rocfft_aot_helper" \"${ROCFFT_BUILD_KERNEL_CACHE_PATH}\" ${ROCFFT_KERNEL_CACHE_PATH} $<TARGET_FILE:rocfft_rtc_helper> ${GPU_TARGETS_AOT}
     DEPENDS rocfft_aot_helper rocfft_rtc_helper
     COMMENT "Compile kernels into shipped cache file"
   )
