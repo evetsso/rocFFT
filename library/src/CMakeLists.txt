@@ -593,7 +593,8 @@ else()
 endif()
 
 if( NOT ENABLE_ASAN_PACKAGING )
-  rocm_install(PROGRAMS $<TARGET_FILE:rocfft_rtc_helper>
+  set_target_properties(rocfft_rtc_helper PROPERTIES INSTALL_RPATH "$ORIGIN/../../")
+  install(TARGETS rocfft_rtc_helper
     DESTINATION "${ROCFFT_RTC_HELPER_INSTALL_DIR}"
     COMPONENT runtime
   )
