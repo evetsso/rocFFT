@@ -77,9 +77,6 @@ target_link_libraries( rocfft_rtc_helper PRIVATE rocfft-rtc-compile )
 set_target_properties( rocfft_rtc_helper PROPERTIES CXX_STANDARD 17 CXX_STANDARD_REQUIRED ON
                                          INSTALL_RPATH "${APPEND_ROCMLIB_RPATH}" )
 target_link_directories( rocfft_rtc_helper PRIVATE ${ROCFFT_HOST_LINK_DIRS} )
-set_target_properties( rocfft_rtc_helper PROPERTIES
-  BUILD_RPATH ${ROCM_PATH}/lib
-)
 
 # Package that helps me set visibility for function names exported
 # from shared library
@@ -462,9 +459,6 @@ target_link_libraries( rocfft_aot_helper PRIVATE
   rocfft-function-pool
   rocfft-solution-map
   )
-set_target_properties( rocfft_aot_helper PROPERTIES
-  BUILD_RPATH ${ROCM_PATH}/lib
-)
 target_link_std_experimental_filesystem( rocfft_aot_helper )
 
  # build executable rocfft-offline-tuner
